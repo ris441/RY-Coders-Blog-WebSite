@@ -12,14 +12,19 @@ body {
 }
 .full-width{
   width: 100%;
-  height: 100%;
+  height:max-content;
 }
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 .footer {
   background-color: #c3bcbc;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
+  margin-top: auto;
 }
 
 .container {
@@ -50,3 +55,9 @@ body {
   .text-color{
     color: rgb(187, 150, 28);
   }
+
+
+
+
+  /* posts */
+  

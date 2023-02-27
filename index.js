@@ -48,7 +48,7 @@ app.get('/compose',function(req, res){
 app.post('/compose',function(req, res){
     
    
-    const post = {topic : req.body.topic, title:req.body.title, content : req.body.content};
+    const post = {topic : req.body.topic, title:req.body.title,headline:req.body.headline, content : req.body.content};
     console.log(post);
     // if(post.topic === "Web Technology"){
         db.push(post)

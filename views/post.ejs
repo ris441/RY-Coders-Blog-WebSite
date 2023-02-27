@@ -1,17 +1,31 @@
 <%-include("partials/header");-%>
 <div class="container full-width">
 
-    <div class=" w-75  mx-auto m-4 g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static bg-black">
+    <!-- <div class=" ">
+        <div class="">
             
-            <strong class="d-inline-block mb-2 text-primary"><%-post.topic-%></strong>
+            <strong class=""><%-post.topic-%></strong>
             <h3 class="mb-0"><%-post.title-%></h3>
             <div class="mb-1 text-muted"><%-date-%></div>
             <p class="card-text mb-auto"><%-post.content-%></p>
             
         </div>
         
-    </div>
+    </div> -->
+    
+      
+      <article>
+        <h1 class="text-center text-primary"><%-post.topic-%></h1>
+        <h3 class="text-color"><%-post.title-%></h3>
+        <div class="m-2">
+          <p><%-date-%></p>
+        </div> 
+          <p><%-post.headline-%></p>
+      </article>
+      
+      <article>
+        <p><%-post.content-%></p> 
+      </article>
 </div>
 
 <%-include("partials/footer");-%>
