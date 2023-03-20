@@ -1,22 +1,12 @@
 <%-include("partials/header");-%>
 <div class="container full-width">
 
-    <!-- <div class=" ">
-        <div class="">
-            
-            <strong class=""><%-post.topic-%></strong>
-            <h3 class="mb-0"><%-post.title-%></h3>
-            <div class="mb-1 text-muted"><%-date-%></div>
-            <p class="card-text mb-auto"><%-post.content-%></p>
-            
-        </div>
-        
-    </div> -->
+    
     
       
       <article>
-        <!-- <h1 class="text-center text-primary"><%-post.topic-%></h1> -->
         <h3 class=" mt-4 text-color"><%-post.title-%></h3>
+        <img src="data:image/jpeg;base64,<%= post.image.toString('base64') %>" />
         <div class="m-2">
           <p><%-date-%></p>
         </div> 
