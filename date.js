@@ -3,7 +3,8 @@ exports.curr_date = function(){
     const options = {
         // weekday:"long",
         day:"numeric",
-        month: "short"
+        month: "short",
+        year:"numeric"
     }
     const today = new Date();
     // console.log(today.toLocaleDateString("hi-IN",options))

@@ -1,19 +1,19 @@
 <%-include("partials/header")-%>
    <div class="content-wrap full-width" >
 
-           <% posts.forEach(post=>{ if(page === post.topic || page == "Blog"){  %>
+           <% posts.forEach(post=>{   %>
                 <div class=" w-75  mx-auto m-4 g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                         <div class="col p-4 d-flex flex-column position-static">
-                                <h1><%page%></h1>
-                                <strong class="d-inline-block mb-2 text-primary"><%-post.topic-%></strong>
-                                <h3 class="mb-0"><%-post.title-%></h3>
+                                <strong class="d-inline-block mb-2"><h3 class="mb-0 text-color"><%-post.title-%></h3></strong>
+                                <strong class="d-inline-block mt-2 text-primary"><%-post.page-%></strong>
+                                
                                 <div class="mb-1 text-muted"><%-date-%></div>
                                 <p class="card-text mb-auto"><%-post.headline-%></p>
                                 <a href="posts/<%-post.title-%>" class="stretched-link">Continue reading</a>
                         </div>
                         
                 </div>
-                <%  } });%>
+                <%   });%>
 </div>
 
 
