@@ -51,17 +51,9 @@ passport.deserializeUser(User.deserializeUser());
 
 //
 
-const upload = multer({ dest: '/upload' });
-// var storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads')
-//   } 
-//   filename: function (req, file, cb) {
-//     cb(null, file.fieldname + '-' + Date.now())
-//   }
-// })
+const upload = multer({ dest: './public/data/uploads/' });
 
-// var upload = multer({ storage: storage })
+
 //
 //=====================
 // ROUTES
