@@ -1,21 +1,40 @@
 <%-include("partials/header");-%>
 <div class="container full-width">
 
-    
-    
-      
-      <article>
-        <h3 class=" mt-4 text-color"><%-post.title-%></h3>
-        <img src="data:image/jpeg;base64,<%= post.image.toString('base64') %>" />
-        <div class="m-2">
-          <p><%-date-%></p>
-        </div> 
-          <h3><p><%-post.headline-%></p></h3>
-      </article>
-      
-      <article>
-        <p><%-post.content-%></p> 
-      </article>
+
+      <div class="container my-5">
+        <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
+          <div>
+              <small>
+              <h5>Tags:<span class="text-primary"><%-post.page-%></span></h5>
+            </small>
+          </div>
+          <h1 class="font-weight-bold text-color"><%-post.title-%>
+      </h1>
+          <p class="my-2" style="line-height: 2;"><%-post.headline-%></p>
+          
+          <div class="my-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+            <small class="ml-2">
+              <p class="text-primary d-block"> Author -: <span class="text-danger "><%-post.username-%></span></p>
+              <span class="text-warning"><%-post.date-%></span>
+            </small>
+          </div>
+            
+          </div>
+          </div>
+          
+         <img class="w-100 my-3"src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>"  />
+        
+        <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
+          <p class="my-2" style="line-height: 2;"><%-post.content-%></p>
+          <br>
+          <br>
+          
+        </div>
+      </div>
+
+     
 </div>
 
 <%-include("partials/footer");-%>

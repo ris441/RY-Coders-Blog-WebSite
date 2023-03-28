@@ -1,198 +1,231 @@
-const express =require('express');
-const bodyparser = require('body-parser');
-const ejs = require('ejs');
+require("dotenv").config();
+var express = require("express"),
+    mongoose = require("mongoose"),
+    passport = require("passport"),
+    bodyParser = require("body-parser"),
+    LocalStrategy = require("passport-local"),
+     multer = require("multer"),
+    passportLocalMongoose = 
+        require("passport-local-mongoose")
 
-const multer = require('multer');
-const fs = require('fs');
-
-const date = require(__dirname+'/date.js');
-const app = express();
-const upload = multer({ dest: '/upload' });
-const { MongoClient } = require("mongodb");
-// Replace the uri string with your MongoDB deployment's connection string
-//mongodb+srv://RY-Coder:rycoder@cluster0.sfzulgf.mongodb.net/test.
-const uri =
-  "mongodb+srv://RY-Coder:rycoder@cluster0.sfzulgf.mongodb.net/test";
-//   const client = new MongoClient(uri);
+        var fs = require('fs');
+        var path = require('path');
+        
+// const upload = multer({ dest: '/upload' });
+const User = require("./model/User");
+const Post = require("./model/Post");
+const { response } = require("express");
+const { connect } = require("http2");
+var app = express();
+mongoose.set('strictQuery',false)
+const PORT = process.env.PORT || 3000;
+const connectDB = async () =>{
+    try{
+      const conn = await mongoose.connect(process.env.MONGO_URI);
+      console.log(`MongoDB connected : ${conn.connection.host}`);
+    }
+    catch(error){
+      console.log(error);
+      process.exit(1);
+    }
+}
+// mongoose.connect("mongodb+srv://RY-Coder:rycoder@cluster0.sfzulgf.mongodb.net/rjit_project?retryWrites=true&w=majority");
   
-  const database = "BlogWebSite";
-  const coll = "Posts";
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require("express-session")({
+    secret: "Rusty is a dog",
+    resave: false,
+    saveUninitialized: false
+}));
 
-const _ = require('lodash');
-
-app.set('view engine', 'ejs');
 app.use(express.static("public"));
-app.use(bodyparser.urlencoded({ extended:true}));
-app.get('/', function(req, res){
-    const connectPromise = MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+app.use(bodyParser.urlencoded({ extended:true}));
+app.use(passport.initialize());
+app.use(passport.session());
+  
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+  
 
-  // Use the promise to perform database operations
-  connectPromise.then((client) => {
-    const collection = client.db(database).collection(coll);
+//
 
-    // Fetch data from the collection
-    const findPromise = collection.find({}).toArray();
+const upload = multer({ dest: '/upload' });
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads')
+//   } 
+//   filename: function (req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now())
+//   }
+// })
 
-    // Use the promise to handle the success and error cases
-    findPromise.then((db) => {
-      res.render('home', {posts: db , date:date.curr_date(),page:"Blog"});
-      client.close();
-    }).catch((err) => {
-      console.error(err);
-      client.close();
+// var upload = multer({ storage: storage })
+//
+//=====================
+// ROUTES
+//=====================
+  
+// Showing home page
+app.get("/", function (req, res) {
+  if (req.session.isLoggedIn) {
+    // Redirect the logged-in user to the home page
+    res.redirect('/userPage');
+  } else{
+    res.render("home");
+
+  }
+});
+  
+// Showing secret page
+  
+// Showing register form
+app.get("/register", function (req, res) {
+    res.render("register");
+});
+  
+// Handling user signup
+app.post("/register", async (req, res) => {
+   
+  const user = await User.create({
+      username: req.body.username,
+      password: req.body.password
     });
-  }).catch((err) => {
-    console.error(err);
-  });
-    // run().catch(console.dir);
-    // console.log(db)
-    // res.render("home",{posts: db , date:date.curr_date(),page:"Blog"});
-})
-app.get('/webtech',function(req, res){
-    const connectPromise = MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-  // Use the promise to perform database operations
-  connectPromise.then((client) => {
-    const collection = client.db(database).collection(coll);
-
-    // Fetch data from the collection
-    const findPromise = collection.find({page:"Web Technology"}).toArray();
-
-    // Use the promise to handle the success and error cases
-    findPromise.then((db) => {
-      res.render('home', {posts: db , date:date.curr_date()});
-      client.close();
-    }).catch((err) => {
-      console.error(err);
-      client.close();
-    });
-  }).catch((err) => {
-    console.error(err);
-  });
     
-    // res.render("home",{ posts: db ,date:date.curr_date(),page:"Web Technology"});
-})
-app.get('/tech',function(req, res){
-    const connectPromise = MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-  // Use the promise to perform database operations
-  connectPromise.then((client) => {
-    const collection = client.db(database).collection(coll);
-
-    // Fetch data from the collection
-    const findPromise = collection.find({page:"Technology"}).toArray();
-
-    // Use the promise to handle the success and error cases
-    findPromise.then((db) => {
-      res.render('home', {posts: db , date:date.curr_date()});
-      client.close();
-    }).catch((err) => {
-      console.error(err);
-      client.close();
-    });
-  }).catch((err) => {
-    console.error(err);
+    return res.status(200).json(user);
   });
-    
-})
-app.get('/posts/:postname',function(req, res){
-    // console.log(req.params.postname);
-    const connectPromise = MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    
-    // Use the promise to perform database operations
-    connectPromise.then((client) => {
-        const collection = client.db(database).collection(coll);
-        
-        // Fetch data from the collection
-      const findPromise = collection.find({}).toArray();
-
-
-
-
-      
-      
-      // Use the promise to handle the success and error cases
-      findPromise.then((db) => {
-          const postname = _.lowerCase(req.params.postname);
-          var find = -1 ;
-          for(let i=0; i<db.length; i++){
-                // const titleStored = db[i].title;
-        
-                const titleStored = _.lowerCase(db[i].title);
-                
-                if(titleStored==postname){
-                    console.log("matching post");
-                    find = i;
-                }
-            }
-            console.log(db[find])
-          //  var rpost = db[find];
-          //  rpost.image = r
-        res.render("post",{post: db[find],date:date.curr_date()});
-        // res.render('home', {posts: db , date:date.curr_date(),page:"Blog"});
-        client.close();
-      }).catch((err) => {
-        console.error(err);
-        // client.close();
+  
+//Showing login form
+app.get("/login", function (req, res) {
+    res.render("login");
+});
+  
+//Handling user login
+app.post("/login", async function(req, res){
+    try {
+        // check if the user exists
+        const user = await User.findOne({ username: req.body.username });
+        if (user) {
+          //check if password matches
+          const result = req.body.password === user.password;
+          if (result) {
+            req.session.isLoggedIn=true;
+            req.session.user=user;
+            console.log(user);
+            res.redirect("/userPage");
+          } else {
+            res.status(400).json({ error: "password doesn't match" });
+          }
+        } else {
+          res.status(400).json({ error: "User doesn't exist" });
+        }
+      } catch (error) {
+        res.status(400).json({ error });
+      }
+});
+  
+//Handling user logout 
+app.get("/logout", function (req, res) {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
       });
-    }).catch((err) => {
-      console.error(err);
-    });
+});
+
+
+function isLoggedIn(req, res, next) {
+    if (req.session.isLoggedIn) return next();
+    else{
+      res.redirect("/login");
+
+    }
+}
+
+app.get("/userPage", isLoggedIn, async function (req, res) {
+ console.log(req.session.user);
+
+ 
+ const posts = await Post.find({});
+ const tech = await Post.find({page:'Technology'})
+ const webtech = await Post.find({page:'Web Technology'})
+//  console.log(posts);
+  res.render("userPage",{Post:posts,tech:tech,webtech:webtech});
+  // res.send("user Page");
+});
+app.get('/tech',isLoggedIn,async function (req,res){
+  
+  const tech = await Post.find({page:'Technology'})
+  res.render('tech',{tech:tech});
+});
+
+app.get('/webtech',isLoggedIn,async function (req,res){
+  
+  const webtech = await Post.find({page:'Web Technology'})
+  
+  res.render("webtech",{webtech:webtech});
+  
+});
+app.get('/posts/:postname',isLoggedIn,async function(req, res){
+  // console.log(req.params.postname);
+  const post=await Post.findOne({title:req.params.postname});
+  console.log(post);
+  res.render("post",{post:post})
 })
 app.get('/success', (req, res) => {
-   res.render('success');
+ res.render('success');
 })
-app.get('/about',function(req, res){
-    res.render("about");
+app.get('/about',isLoggedIn,function(req, res){
+  res.render("about");
 })
-app.get('/contact',function(req, res){
-    res.render("contact");
+app.get('/contact',isLoggedIn,function(req, res){
+  res.render("contact");
 })
-app.get('/compose',function(req, res){
-    res.render("compose");
+app.get('/compose',isLoggedIn,function(req, res){
+  res.render("compose");
 });
-app.post('/compose',upload.single("image"),function(req, res){
-  const buffer = fs.readFileSync(req.file.path);
-  console.log(req.file,req.body)
-    const post = {
-        image:buffer,
-        page:req.body.page,
-        title: req.body.title,
-        headline:req.body.headline,
-        content: req.body.content,
+app.post('/compose',isLoggedIn,upload.single("image"),async function(req, res){
+  // if(req.session.isLoggedIn){
 
-    };
-    const connectPromise = MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("req body",req.body,"req file",req.file)
+    const buffer = fs.readFileSync(req.file.path);
+  console.log("image buffer",buffer);
+  var date = new Date();
+  const options = {
+    // weekday:"long",
+    day:"numeric",
+    month: "short",
+    year:"numeric"
+}
+  // date = date.toLocaleDateString("en-US",options)
+    const post = await Post.create({
+      username:req.session.user.username,
+      title: req.body.title,
+      headline:req.body.headline,
+      content: req.body.content,
+      page:req.body.page,
+      image:{
+        data:buffer,
+        contentType: 'image/jpeg'
+      },
+      date:date.toLocaleDateString("en-US"),
+    })
+    console.log(JSON.stringify(post));
+    return res.redirect('/success');
+  // }
+  // else{
+  //   res.send('error in login in ')  
+  // }
+})
 
-    // Use the promise to perform database operations
-    connectPromise.then((client) => {
-      const collection = client.db(database).collection(coll);
+
   
-      // Fetch data from the collection
-    //   const findPromise = collection.find({}).toArray();
-    console.log(post);
-    collection.insertOne(post,((err) => {
-        if (err) throw err;
-        console.log('Data inserted successfully');
-        res.send('Data inserted successfully');
-      }));
-  
-      // Use the promise to handle the success and error cases
-    //   findPromise.then((db) => {
-    //     res.render('home', {posts: db , date:date.curr_date(),page:"Blog"});
-    //     client.close();
-    //   }).catch((err) => {
-    //     console.error(err);
-    //     client.close();
-    //   });
-    }).catch((err) => {
-      console.error(err);
-    });
-     const postname = post.title;
-    // res.redirect(`/posts/${postname}`);
-    
-    res.redirect('/success');
-  })
-app.listen(3000,(req,res)=>{
-    console.log("listening on port 3000");
-});
+// var port = process.env.PORT || 3000;
+connectDB().then(
+  ()=>{
+    app.listen(PORT, function () {
+      console.log("Server Has Started!");
+  });
+  }
+);
+
