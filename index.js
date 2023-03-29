@@ -160,21 +160,36 @@ app.get('/webtech',isLoggedIn,async function (req,res){
 });
 app.get('/posts/:postname',isLoggedIn,async function(req, res){
   // console.log(req.params.postname);
+  if(isLoggedIn){
+    
   const post=await Post.findOne({title:req.params.postname});
   console.log(post);
   res.render("post",{post:post})
+  }
 })
-app.get('/success', (req, res) => {
- res.render('success');
+app.get('/success',isLoggedIn, (req, res) => {
+  if(isLoggedIn){
+    res.render('success');
+
+  }
 })
 app.get('/about',isLoggedIn,function(req, res){
-  res.render("about");
+  if(isLoggedIn){
+    res.render("about");
+
+  }
 })
 app.get('/contact',isLoggedIn,function(req, res){
-  res.render("contact");
+  if(isLoggedIn){
+
+    res.render("contact");
+  }
 })
 app.get('/compose',isLoggedIn,function(req, res){
-  res.render("compose");
+  if(isLoggedIn){
+    res.render("compose");
+  }
+
 });
 app.post('/compose',isLoggedIn,
 // upload.single("image"),
