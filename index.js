@@ -51,7 +51,7 @@ passport.deserializeUser(User.deserializeUser());
 
 //
 
-const upload = multer({ dest: './public/data/uploads/' });
+// const upload = multer({ dest: './public/data/uploads/' });
 
 
 //
@@ -176,12 +176,14 @@ app.get('/contact',isLoggedIn,function(req, res){
 app.get('/compose',isLoggedIn,function(req, res){
   res.render("compose");
 });
-app.post('/compose',isLoggedIn,upload.single("image"),async function(req, res){
+app.post('/compose',isLoggedIn,
+// upload.single("image"),
+async function(req, res){
   // if(req.session.isLoggedIn){
 
-    console.log("req body",req.body,"req file",req.file)
-    const buffer = fs.readFileSync(req.file.path);
-  console.log("image buffer",buffer);
+  //   console.log("req body",req.body,"req file",req.file)
+  //   const buffer = fs.readFileSync(req.file.path);
+  // console.log("image buffer",buffer);
   var date = new Date();
   const options = {
     // weekday:"long",
@@ -196,10 +198,10 @@ app.post('/compose',isLoggedIn,upload.single("image"),async function(req, res){
       headline:req.body.headline,
       content: req.body.content,
       page:req.body.page,
-      image:{
-        data:buffer,
-        contentType: 'image/jpeg'
-      },
+      // image:{
+      //   data:buffer,
+      //   contentType: 'image/jpeg'
+      // },
       date:date.toLocaleDateString("en-US"),
     })
     console.log(JSON.stringify(post));
