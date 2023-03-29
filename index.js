@@ -194,7 +194,7 @@ app.get('/compose',isLoggedIn,function(req, res){
 app.post('/compose',isLoggedIn,
 // upload.single("image"),
 async function(req, res){
-  // if(req.session.isLoggedIn){
+  if(req.session.isLoggedIn){
 
   //   console.log("req body",req.body,"req file",req.file)
   //   const buffer = fs.readFileSync(req.file.path);
@@ -221,10 +221,10 @@ async function(req, res){
     })
     console.log(JSON.stringify(post));
     return res.redirect('/success');
-  // }
-  // else{
-  //   res.send('error in login in ')  
-  // }
+  }
+  else{
+    res.send('error in login in ')  
+  }
 })
 
 
