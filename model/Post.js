@@ -16,6 +16,11 @@ var Post = new Schema({
    content:{
     type:'string',
    },
+   image:
+   {
+       data: Buffer,
+       contentType: String
+   },
    page:{
     type: 'string',
    },
