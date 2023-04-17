@@ -2,35 +2,44 @@
 <div class="container full-width">
 
 
-      <div class="container my-5 box">
+      <div class="container my-5 ">
         <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
+          <div class="box" id="heading">
+
+            <h1 class="font-weight-bold"><%-post.title-%>
+          </div>
           <div>
-              <small>
+            
+              <small style="float: inline-start;">
               <h5>Tags:<span class="text-primary"><%-post.page-%></span></h5>
             </small>
           </div>
-          <h1 class="font-weight-bold text-color"><%-post.title-%>
       </h1>
           <p class="my-2" style="line-height: 2;"><%-post.headline-%></p>
           
-          <div class="my-3 d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-            <small class="ml-2">
-              <p class="text-primary d-block"> Author -: <span class="text-danger "><%-post.username-%></span></p>
-              <span class="text-warning"><%-post.date-%></span>
-            </small>
           </div>
+          <div class="box">
+
+            <img class="w-50 my-3 mx-5"src="<%-post.image-%>"  />
             
+            <div style="max-width: 700px; top: -80px; color: black;" class="mx-auto text-secondary">
+              <p class="my-2" style="line-height: 2;"><%-post.content-%></p>
+              <br>
+              <br>
+              
+            </div>
           </div>
+
+        <div class="author">
+          <img class="author__item author__pic" src="https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50581.jpg?w=740" alt="my face"/>
+          <div class="author__item author__name">
+            <b class="author__heading">Author:</b><br/>
+            <a class="author__link" rel="author" style="color:rgb(81, 177, 52)" href="//brettanda.ca" target="_blank"><%-author-%></a>
           </div>
-          
-         <img class="w-50 my-3 mx-5"src="<%-post.image-%>"  />
-        
-        <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
-          <p class="my-2" style="line-height: 2;"><%-post.content-%></p>
-          <br>
-          <br>
-          
+          <div class="author__item author__date">
+            <b class="author__heading">Date Posted:</b><br/>
+            <%-post.date-%>
+          </div>
         </div>
       </div>
 

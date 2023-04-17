@@ -3,19 +3,12 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
-    LocalStrategy = require("passport-local"),
-     multer = require("multer"),
-    passportLocalMongoose = 
-        require("passport-local-mongoose")
-
-        var fs = require('fs');
-        var path = require('path');
-        
-// const upload = multer({ dest: '/upload' });
+    LocalStrategy = require("passport-local")
 const User = require("./model/User");
 const Post = require("./model/Post");
 const { response } = require("express");
 const { connect } = require("http2");
+const { curr_date } = require('./date');
 var app = express();
 mongoose.set('strictQuery',false)
 const PORT = process.env.PORT || 3000;
@@ -130,7 +123,7 @@ app.get("/logout", function (req, res) {
 function isLoggedIn(req, res, next) {
     if (req.session.isLoggedIn) return next();
     else{
-      res.redirect("/login");
+      res.redirect("/");
 
     }
 }
@@ -165,7 +158,8 @@ app.get('/posts/:postname',isLoggedIn,async function(req, res){
     
   const post=await Post.findOne({title:req.params.postname});
   console.log(post);
-  res.render("post",{post:post})
+  const user = await User.findOne({username:post.username})
+  res.render("post",{post:post,author:user.name})
   }
 })
 app.get('/success',isLoggedIn, (req, res) => {
@@ -195,8 +189,7 @@ app.get('/compose',isLoggedIn,function(req, res){
 app.post('/compose',isLoggedIn,async function(req, res){
   // if(req.session.isLoggedIn){
 
-  var date = new Date();
-  
+  const today = curr_date();
   // date = date.toLocaleDateString("en-US",options)
   console.log(req.body)
     const post = await Post.create({
@@ -206,7 +199,7 @@ app.post('/compose',isLoggedIn,async function(req, res){
       content: req.body.content,
       page:req.body.page,
       image:req.body.image,
-      date:date.toDateString(),
+      date:today,
     })
     console.log(JSON.stringify(post));
     return res.redirect('/success');
