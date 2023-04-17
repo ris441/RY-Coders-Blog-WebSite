@@ -2,7 +2,7 @@
 <div class="container">
 
   <h1 class="text-color">WRITE BLOG</h1>
-  <form  action="/compose" method="post" enctype="multipart/form-data">
+  <form  action="/compose" method="post">
       <div class="form-group">
           <label for="exampleFormControlSelect1">Topic</label>
           <select class="form-control" id="exampleFormControlSelect1" name="page">
@@ -16,8 +16,8 @@
         <input type="text" class="form-control" id="text-title" placeholder="Enter the Title" name="title">
       </div>
       <div class="form-group">
-        <label for="text-title">Image</label><br>
-        <input type="file" name="image" value="/img/rylogo.png">
+        <label for="text-title">Image Url</label><br>
+        <input type="text" class="form-control" id="text-title" placeholder="Give Url for Image" name="image" >
        
       </div>
       <div class="form-group">

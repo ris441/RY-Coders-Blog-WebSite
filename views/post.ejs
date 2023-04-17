@@ -2,7 +2,7 @@
 <div class="container full-width">
 
 
-      <div class="container my-5">
+      <div class="container my-5 box">
         <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
           <div>
               <small>
@@ -24,7 +24,7 @@
           </div>
           </div>
           
-         <img class="w-50 my-3 mx-5"src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>"  />
+         <img class="w-50 my-3 mx-5"src="<%-post.image-%>"  />
         
         <div style="max-width: 700px; top: -80px;" class="mx-auto text-secondary">
           <p class="my-2" style="line-height: 2;"><%-post.content-%></p>

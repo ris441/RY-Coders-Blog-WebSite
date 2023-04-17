@@ -11,11 +11,10 @@ var User = new Schema({
         type: String
     },
     name:{
-        firstName: {type:String},
-        middleName: {type:String},
-        lastName:{type:String}
+        type:String
+    }, email:{
+        type:String
     },
-    isVerfied:{type:Boolean},
 })
   
 User.plugin(passportLocalMongoose);

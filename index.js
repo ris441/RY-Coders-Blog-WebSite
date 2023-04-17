@@ -51,7 +51,6 @@ passport.deserializeUser(User.deserializeUser());
 
 //
 
-const upload = multer({ dest: './public/data/uploads/' });
 
 
 //
@@ -69,29 +68,31 @@ app.get("/", function (req, res) {
 
   }
 });
-  
+
 // Showing secret page
   
 // Showing register form
-app.get("/register", function (req, res) {
-    res.render("register");
-});
+// app.get("/register", function (req, res) {
+//     res.render("register");
+// });
   
 // Handling user signup
 app.post("/register", async (req, res) => {
    
   const user = await User.create({
+      name:req.body.name,
+      email:req.body.email,
       username: req.body.username,
       password: req.body.password
     });
     
-    return res.status(200).json(user);
+    return res.status(200).redirect("/");
   });
   
 //Showing login form
-app.get("/login", function (req, res) {
-    res.render("login");
-});
+// app.get("/login", function (req, res) {
+//     res.render("login");
+// });
   
 //Handling user login
 app.post("/login", async function(req, res){
@@ -191,45 +192,28 @@ app.get('/compose',isLoggedIn,function(req, res){
   }
 
 });
-<<<<<<< HEAD
-app.post('/compose',isLoggedIn,
-// upload.single("image"),
-async function(req, res){
-  if(req.session.isLoggedIn){
-=======
-app.post('/compose',isLoggedIn,upload.single("image"),async function(req, res){
+app.post('/compose',isLoggedIn,async function(req, res){
   // if(req.session.isLoggedIn){
->>>>>>> parent of 9bdf4b4 (image removed)
 
-    console.log("req body",req.body,"req file",req.file)
-    const buffer = fs.readFileSync(req.file.path);
-  console.log("image buffer",buffer);
   var date = new Date();
-  const options = {
-    // weekday:"long",
-    day:"numeric",
-    month: "short",
-    year:"numeric"
-}
+  
   // date = date.toLocaleDateString("en-US",options)
+  console.log(req.body)
     const post = await Post.create({
       username:req.session.user.username,
       title: req.body.title,
       headline:req.body.headline,
       content: req.body.content,
       page:req.body.page,
-      image:{
-        data:buffer,
-        contentType: 'image/jpeg'
-      },
-      date:date.toLocaleDateString("en-US"),
+      image:req.body.image,
+      date:date.toDateString(),
     })
     console.log(JSON.stringify(post));
     return res.redirect('/success');
-  }
-  else{
-    res.send('error in login in ')  
-  }
+  // }
+  // else{
+  //   res.send('error in login in ')  
+  // }
 })
 
 

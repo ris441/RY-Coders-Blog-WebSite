@@ -18,8 +18,8 @@ var Post = new Schema({
    },
    image:
    {
-       data: Buffer,
-       contentType: String
+      type:'string',
+    
    },
    page:{
     type: 'string',
