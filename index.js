@@ -159,7 +159,18 @@ app.get('/posts/:postname',isLoggedIn,async function(req, res){
   const post=await Post.findOne({title:req.params.postname});
   console.log(post);
   const user = await User.findOne({username:post.username})
-  res.render("post",{post:post,author:user.name})
+  res.render("post",{post:post,user:user})
+  }
+})
+
+app.get('/myblog/:username',isLoggedIn,async function(req, res){
+  // console.log(req.params.postname);
+  if(isLoggedIn){
+    
+  const posts=await Post.find({username:req.params.username});
+  
+  const user = await User.findOne({username:req.params.username})
+  res.render("myblog",{Posts:posts,author:user.name})
   }
 })
 app.get('/success',isLoggedIn, (req, res) => {

@@ -1,0 +1,37 @@
+
+<%-include("partials/header")-%>
+   <div class="content-wrap full-width" >
+
+<div id="cards_landscape_wrap-2">
+    <div class="container">
+        <h1 class="box" id="heading" style="color: white; font-weight: bold;"><%-author-%>'s Blogs</h1>
+            <div class="row">
+
+ <%Posts.forEach(post=>{   %>
+                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                             <a href="">
+                                 <div class="card-flyer">
+                                     <div class="text-box">
+                                         <div class="image-box">
+                                                 <img src="<%-post.image-%>" width="100%" />
+                                         </div>
+                                         <div class="text-container">
+                                             <h6><%-post.title-%></h6>
+                                            <p><%-post.headline-%>
+                                                 </p>
+                                                 <a href="posts/<%-post.title-%>" >Read More</a>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </a>
+                         </div>
+                         
+                         <%   });%>
+                 </div>
+                 </div>
+</div>
+
+</div>
+
+
+<%-include("partials/footer")-%>
